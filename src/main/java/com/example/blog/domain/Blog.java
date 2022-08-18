@@ -19,17 +19,23 @@ public class Blog extends BlogTimeStamped { // 생성,수정 시간을 자동으
     @Column(nullable = false)
     private String contents;
 
-    public Blog(String username, String contents) {
+    @Column(nullable = false)
+    private String title;
+
+    public Blog(String username, String contents, String title) {
         this.username = username;
         this.contents = contents;
+        this.title = title;
     }
 
     public Blog(BlogRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
+        this.title = requestDto.getTitle();
     }
     public void update(BlogRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
+        this.title = requestDto.getTitle();
     }
 }
