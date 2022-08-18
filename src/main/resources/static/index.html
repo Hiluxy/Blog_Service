@@ -204,6 +204,10 @@
         #cards-box {
             margin-top: 12px;
         }
+
+        #title {
+            height: 10px;
+        }
     </style>
     <script>
         // 미리 작성된 영역 - 수정하지 않으셔도 됩니다.
@@ -302,6 +306,10 @@
                 ${username}
             </div>
         </div>
+<div class="title">
+        <div id="${id}-title" class="text">
+                ${title}
+</div>
         <!-- contents 조회/수정 영역-->
         <div class="contents">
             <div id="${id}-contents" class="text">
@@ -312,14 +320,8 @@
             </div>
         </div>
 
-        <!-- title 조회/수정 영역-->
-        <div class="title">
-            <div id="${id}-title" class="text">
-                ${title}
-            </div>
-            <div id="${id}-editarea" class="edit">
-                <textarea id="${id}-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
-            </div>
+
+
         </div>
         <!-- 버튼 영역-->
         <div class="footer">
@@ -376,7 +378,7 @@
                 return;
             }
             // 3. 전달할 data JSON으로 만듭니다.
-            let data = {'username': username, 'contents': contents, 'title':title};
+            let data = {'username': username, 'contents': contents, 'title': title};
             // 4. PUT /api/blogs/{id} 에 data를 전달합니다.
             $.ajax({
                 type: "PUT",
