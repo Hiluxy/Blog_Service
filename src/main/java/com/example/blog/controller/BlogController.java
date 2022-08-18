@@ -1,8 +1,6 @@
 package com.example.blog.controller;
 
-import com.example.blog.domain.Blog;
-import com.example.blog.domain.BlogRepository;
-import com.example.blog.domain.BlogRequestDto;
+import com.example.blog.domain.*;
 import com.example.blog.service.BlogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,19 +11,24 @@ import java.util.List;
 @RestController
 public class BlogController {
     private final BlogRepository blogRepository;
-    private final BlogService blogService;
+    private final BlogService blogService; //@Bean이 new해줌
 
     //Post
     @PostMapping("/api/blogs")
     public Blog createBlog(@RequestBody BlogRequestDto requestDto) { //@RequestBody 꼭 붙이기~
-        Blog blog = new Blog(requestDto);
-        return blogRepository.save(blog);
+        return blogService.create(requestDto);
     }
 
     //Get
     @GetMapping("/api/blogs")
-    public List<Blog> getBlogs() {
-        return blogRepository.findAllByOrderByModifiedAtDesc();
+    public List<BlogResponseDto> getBlogs() {
+        return blogService.getBlogList();
+    }
+
+    //GetOne
+    @GetMapping("/api/blogs/{id}")
+    public Blog getOneBlog(@PathVariable Long id){
+        return blogService.getOne(id);
     }
 
     //Put
@@ -38,7 +41,12 @@ public class BlogController {
     //Delete
     @DeleteMapping("/api/blogs/{id}")
     public Long deleteBlog(@PathVariable Long id) {
-        blogRepository.deleteById(id);
-        return id;
+        return blogService.delete(id);
+    }
+
+    //
+    @PostMapping("/api/blogs/{id}")
+    public BlogResponsePWDto checkPw(@PathVariable Long id,@RequestBody BlogRequestDto requestDto){
+        return blogService.check(id,requestDto);
     }
 }

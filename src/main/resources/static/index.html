@@ -240,10 +240,21 @@
         // 수정 버튼을 눌렀을 때, 기존 작성 내용을 textarea 에 전달합니다.
         // 숨길 버튼을 숨기고, 나타낼 버튼을 나타냅니다.
         function editPost(id) {
+            //CheckPw();
             showEdits(id);
             let contents = $(`#${id}-contents`).text().trim();
             $(`#${id}-textarea`).val(contents);
         }
+        // function CheckPw(){
+        //     function showEdits(id) {
+        //         $(`#${id}-pweditarea`).show();
+        //         $(`#${id}-submit`).show();
+        //         $(`#${id}-delete`).show();
+        //
+        //         $(`#${id}-pw`).hide();
+        //         $(`#${id}-edit`).hide();
+        //     }
+        // }
 
         function showEdits(id) {
             $(`#${id}-editarea`).show();
@@ -286,6 +297,7 @@
                         let username = message['username'];
                         let contents = message['contents'];
                         let title = message['title'];
+                        let pw = message['pw'];
                         let modifiedAt = message['modifiedAt'];
                         addHTML(id, username, contents, title, modifiedAt);
                     }
@@ -306,18 +318,22 @@
                 ${username}
             </div>
         </div>
-<div class="title">
-        <div id="${id}-title" class="text">
-                ${title}
-</div>
+            <div class="title">
+                    <div id="${id}-title" class="text">
+                            ${title}
+            </div>
         <!-- contents 조회/수정 영역-->
         <div class="contents">
             <div id="${id}-contents" class="text">
                 ${contents}
             </div>
+            <div id="${id}-pw" class="text">
+                ${contents}
+            </div>
             <div id="${id}-editarea" class="edit">
                 <textarea id="${id}-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
             </div>
+
         </div>
 
 
@@ -339,6 +355,7 @@
             // 1. 작성한 메모를 불러옵니다.
             let contents = $('#contents').val();
             let title = $('#title').val();
+            let pw = $('#pw').val();
 
             // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
             if (isValidContents(contents) == false) {
@@ -350,7 +367,7 @@
             // 3. genRandomName 함수를 통해 익명의 username을 만듭니다.
             let username = genRandomName(10);
             // 4. 전달할 data JSON으로 만듭니다.
-            let data = {'username': username, 'contents': contents, 'title': title};
+            let data = {'username': username, 'contents': contents, 'title': title, 'pw':pw};
             // 5. POST /api/blogs 에 data를 전달합니다.
             $.ajax({
                 type: "POST",
@@ -367,18 +384,16 @@
         // 메모 수정
         function submitEdit(id) {
             // 1. 작성 대상 메모의 username과 contents 를 확인합니다.
-            let username = $(`#${id}-username`).text().trim();
-            let contents = $(`#${id}-content`).val().trim();
+            let username = $(`#${id}-username`).text().trim(); //읽기모드는 text()
+            let contents = $(`#${id}-content`).val().trim(); //커서깜빡이는건 val()
             let title = $(`#${id}-title`).val().trim();
+            let pw = $(`#${id}-pw`).val().trim();
             // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
             if (isValidContents(contents) == false) {
                 return;
             }
-            if (isValidContents(title) == false) {
-                return;
-            }
             // 3. 전달할 data JSON으로 만듭니다.
-            let data = {'username': username, 'contents': contents, 'title': title};
+            let data = {'username': username, 'contents': contents, 'title': title, 'pw':pw};
             // 4. PUT /api/blogs/{id} 에 data를 전달합니다.
             $.ajax({
                 type: "PUT",
@@ -426,6 +441,7 @@
                   rows="10"></textarea>
         <textarea class="field" placeholder="공유하고 싶은 소식을 입력해주세요" name="contents" id="contents" cols="30"
                   rows="10"></textarea>
+        <form> 비밀번호: <input id="pw" type="text"maxlength="5"/><br></form>
         <!--            <button class="btn btn-danger" onclick="writePost()">작성하기</button>-->
         <img src="images/send.png" alt="" onclick="writePost()">
     </div>
@@ -446,6 +462,9 @@
                     dsafnkalfklewakflekelafkleajfkleafkldsankflenwaklfnekwlafneklwanfkelawnfkelanfkleanfklew
                 </div>
                 <div id="1-editarea" class="edit">
+                    <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+                </div>
+                <div id="1-pweditarea" class="pwedit">
                     <textarea id="1-textarea" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
                 </div>
             </div>
